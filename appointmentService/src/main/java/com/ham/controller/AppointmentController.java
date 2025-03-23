@@ -37,10 +37,6 @@ public class AppointmentController {
         Optional<Appointment> appointment = repo.findById(id);
         return appointment.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
-//    @GetMapping("/{id}")
-//    public boolean appointmentrExistsById(@PathVariable Integer id) {
-//        return appointmentService.appointmentexistsById(id);
-//    }
 
     @PutMapping("/update/{appointmentID}")
     public ResponseEntity<Appointment> updateAppointment(@PathVariable int appointmentID,

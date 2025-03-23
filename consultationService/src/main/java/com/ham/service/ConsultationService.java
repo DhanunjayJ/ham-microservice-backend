@@ -31,7 +31,7 @@ public class ConsultationService {
             throw new CustomExceptions("Appointment not found");
         }
 
-        if (!"Booked".equalsIgnoreCase(appointment.getStatus())) {
+        if ("Cancelled".equalsIgnoreCase(appointment.getStatus())) {
             throw new CustomExceptions("Consultation cannot be added as the appointment is not in 'Booked' status");
         }
 

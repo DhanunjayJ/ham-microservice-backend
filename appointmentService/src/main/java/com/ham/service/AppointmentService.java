@@ -138,13 +138,32 @@ public class AppointmentService {
     public Appointment completedAppointment(int appointmentID) {
         Appointment appointment = appointmentRepository.findById(appointmentID)
                 .orElseThrow(() -> new CustomExceptions("Appointment not found with ID: " + appointmentID));
+        if("Cancelled".equalsIgnoreCase(appointment.getStatus())) {
+            throw new CustomExceptions("Can't cancel Appointment that is already completed");
+        }
         appointment.setStatus("Completed");
+        Optional<User> patientData = userfeign.getUserData(appointment.getPatientID());
+        Optional<User> doctorData = userfeign.getUserData(appointment.getDoctorID());
+
+        String patientEmail = patientData.get().getEmail();
+        String doctorEmail = doctorData.get().getEmail();
+
+        emailService.sendEmail(patientEmail,
+                "Appointment completed 🙌",
+                "Your appointment with Doctor " + doctorData.get().getName() + " is Completed");
+        emailService.sendEmail(doctorEmail,
+                "Appointment Completed 🙌",
+                "Your appointment with Patient " + patientData.get().getName() + " is Completed");
         return appointmentRepository.save(appointment);
     }
 
     public Appointment cancelAppointment(int appointmentID) {
         Appointment appointment = appointmentRepository.findById(appointmentID)
                 .orElseThrow(() -> new CustomExceptions("Appointment not found with ID: " + appointmentID));
+        if("Completed".equalsIgnoreCase(appointment.getStatus())) {
+            throw new CustomExceptions("Can't cancel Appointment that is already completed");
+        }
+
         appointment.setStatus("Cancelled");
 
         LocalDate date = appointment.getTimeSlot().toLocalDate();
