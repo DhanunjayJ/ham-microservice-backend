@@ -78,19 +78,18 @@ public class AppointmentService {
         if (doctorData.isEmpty()) {
             logger.info("Doctor data not found for ID: " + doctorID);
         }
-
-        String patientEmail = patientData.get().getEmail();
-        String doctorEmail = doctorData.get().getEmail();
-
-        logger.info("Patient Email: " + patientEmail);
-        logger.info("Doctor Email: " + doctorEmail);
-
-        emailService.sendEmail(patientEmail,
-                "Appointment Confirmation ✔️☑️",
-                "Your appointment with Doctor " + doctorData.get().getName() + " is confirmed for " + timeSlot);
-        emailService.sendEmail(doctorEmail,
-                "Appointment Confirmation ✔️☑️",
-                "Your appointment with Patient " + patientData.get().getName() + " is confirmed for " + timeSlot);
+//        String patientEmail = patientData.get().getEmail();
+//        String doctorEmail = doctorData.get().getEmail();
+//
+//        logger.info("Patient Email: " + patientEmail);
+//        logger.info("Doctor Email: " + doctorEmail);
+//
+//        emailService.sendEmail(patientEmail,
+//                "Appointment Confirmation ✔️☑️",
+//                "Your appointment with Doctor " + doctorData.get().getName() + " is confirmed for " + timeSlot);
+//        emailService.sendEmail(doctorEmail,
+//                "Appointment Confirmation ✔️☑️",
+//                "Your appointment with Patient " + patientData.get().getName() + " is confirmed for " + timeSlot);
 
         return appointmentRepository.save(appointment);
     }
@@ -119,18 +118,18 @@ public class AppointmentService {
 
         appointment.setTimeSlot(newAppointmentDateTime);
 
-        Optional<User> patientData = userfeign.getUserData(appointment.getPatientID());
-        Optional<User> doctorData = userfeign.getUserData(appointment.getDoctorID());
-
-        String patientEmail = patientData.get().getEmail();
-        String doctorEmail = doctorData.get().getEmail();
-
-        emailService.sendEmail(patientEmail,
-                "Appointment Updated! ⭕",
-                "Your appointment with Doctor " + doctorData.get().getName() + " is updated from  " + oldTimeSlot +" to "+newAppointmentDateTime);
-        emailService.sendEmail(doctorEmail,
-                "Appointment Updated! ⭕",
-                "Your appointment with Patient " + patientData.get().getName() + " is confirmed for " + oldTimeSlot +" to "+newAppointmentDateTime);
+//        Optional<User> patientData = userfeign.getUserData(appointment.getPatientID());
+//        Optional<User> doctorData = userfeign.getUserData(appointment.getDoctorID());
+//
+//        String patientEmail = patientData.get().getEmail();
+//        String doctorEmail = doctorData.get().getEmail();
+//
+//        emailService.sendEmail(patientEmail,
+//                "Appointment Updated! ⭕",
+//                "Your appointment with Doctor " + doctorData.get().getName() + " is updated from  " + oldTimeSlot +" to "+newAppointmentDateTime);
+//        emailService.sendEmail(doctorEmail,
+//                "Appointment Updated! ⭕",
+//                "Your appointment with Patient " + patientData.get().getName() + " is confirmed for " + oldTimeSlot +" to "+newAppointmentDateTime);
 
         return appointmentRepository.save(appointment);
     }
@@ -139,21 +138,21 @@ public class AppointmentService {
         Appointment appointment = appointmentRepository.findById(appointmentID)
                 .orElseThrow(() -> new CustomExceptions("Appointment not found with ID: " + appointmentID));
         if("Cancelled".equalsIgnoreCase(appointment.getStatus())) {
-            throw new CustomExceptions("Can't cancel Appointment that is already completed");
+            throw new CustomExceptions("Can't Complete Appointment that is already completed");
         }
         appointment.setStatus("Completed");
-        Optional<User> patientData = userfeign.getUserData(appointment.getPatientID());
-        Optional<User> doctorData = userfeign.getUserData(appointment.getDoctorID());
-
-        String patientEmail = patientData.get().getEmail();
-        String doctorEmail = doctorData.get().getEmail();
-
-        emailService.sendEmail(patientEmail,
-                "Appointment completed 🙌",
-                "Your appointment with Doctor " + doctorData.get().getName() + " is Completed");
-        emailService.sendEmail(doctorEmail,
-                "Appointment Completed 🙌",
-                "Your appointment with Patient " + patientData.get().getName() + " is Completed");
+//        Optional<User> patientData = userfeign.getUserData(appointment.getPatientID());
+//        Optional<User> doctorData = userfeign.getUserData(appointment.getDoctorID());
+//
+//        String patientEmail = patientData.get().getEmail();
+//        String doctorEmail = doctorData.get().getEmail();
+//
+//        emailService.sendEmail(patientEmail,
+//                "Appointment completed 🙌",
+//                "Your appointment with Doctor " + doctorData.get().getName() + " is Completed");
+//        emailService.sendEmail(doctorEmail,
+//                "Appointment Completed 🙌",
+//                "Your appointment with Patient " + patientData.get().getName() + " is Completed");
         return appointmentRepository.save(appointment);
     }
 
@@ -175,18 +174,18 @@ public class AppointmentService {
             availabiltyfeign.updateAvailability(availability.getAvailabilityID(),availability);
         }
 
-        Optional<User> patientData = userfeign.getUserData(appointment.getPatientID());
-        Optional<User> doctorData = userfeign.getUserData(appointment.getDoctorID());
-
-        String patientEmail = patientData.get().getEmail();
-        String doctorEmail = doctorData.get().getEmail();
-
-        emailService.sendEmail(patientEmail,
-                "Appointment Cancelled! ❌",
-                "Your appointment with Doctor " + doctorData.get().getName() +" on "+ appointment.getTimeSlot()+ " is cancelled");
-        emailService.sendEmail(doctorEmail,
-                "Appointment Cancelled! ❌",
-                "Your appointment with Patient " + patientData.get().getName() +" on "+appointment.getTimeSlot()+ " is cancelled");
+//        Optional<User> patientData = userfeign.getUserData(appointment.getPatientID());
+//        Optional<User> doctorData = userfeign.getUserData(appointment.getDoctorID());
+//
+//        String patientEmail = patientData.get().getEmail();
+//        String doctorEmail = doctorData.get().getEmail();
+//
+//        emailService.sendEmail(patientEmail,
+//                "Appointment Cancelled! ❌",
+//                "Your appointment with Doctor " + doctorData.get().getName() +" on "+ appointment.getTimeSlot()+ " is cancelled");
+//        emailService.sendEmail(doctorEmail,
+//                "Appointment Cancelled! ❌",
+//                "Your appointment with Patient " + patientData.get().getName() +" on "+appointment.getTimeSlot()+ " is cancelled");
 
         return appointmentRepository.save(appointment);
     }
